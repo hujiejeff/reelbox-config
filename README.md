@@ -1,90 +1,92 @@
 # reelbox-config
 
-我的 Reelbox 配置。一个 `index.json` 里放着源、源插件、适配器,应用里粘一次地址就全装好。
+我的 Reelbox 配置。一个 `index.json` 里放着源和适配器,应用里粘一次地址就全装好。
 
 ## 怎么用
 
 Reelbox 里打开 **设置 → 订阅 → 添加**,填这个地址:
 
 ```
-https://cdn.jsdelivr.net/gh/hujiejeff/reelbox-config@master/index.json
-```
-
-国内用上面这条(jsDelivr)。连 GitHub 顺畅的话也可以直接用 raw:
-
-```
 https://raw.githubusercontent.com/hujiejeff/reelbox-config/master/index.json
 ```
 
-分支是 `master`。装完会立刻切换过去。以后我改了仓库,你在订阅页点「检查更新」就能看到新版本。
+国内连不上 GitHub 时可以走 jsDelivr(有缓存,最多晚 12 小时):
+
+```
+https://cdn.jsdelivr.net/gh/hujiejeff/reelbox-config@master/index.json
+```
+
+分支是 `master`。装完会立刻切换过去。以后我改了仓库,你在订阅页点「检查更新」。
 
 ## 里面有什么
 
-- **源**:点播站点的采集接口(苹果 CMS 那套 JSON / XML),一共 30 条
-- **插件**:`4kvm.reelbox.js`,4k 影视(4kvm.net)的解析插件,对应订阅里的「4K影视」
-- **适配器**:没有。`vod` / `iplayr` / `m3u` 是应用自带的内置适配器,不用放进仓库
+- **源**:30 条,点播站的采集接口 + 直播频道表
+- **适配器**:1 个 —— `4kvm.reelbox.js`,4k 影视(4kvm.net)的解析插件
 
-## index.json 怎么写
+## 写法
 
 ```json
 {
-  "schema": "reelbox-index/1",
+  "schema": "reelbox-index/2",
   "name": "reelbox 基础配置",
-  "version": "1.1.0",
-  "updated": "2026-11-22T12:20:00Z",
+  "version": "2.0.0",
+  "updated": "2026-11-22T14:30:00Z",
+
+  "adapters": [
+    { "id": "4kvm", "name": "4K影视", "url": "plugins/4kvm.reelbox.js" }
+  ],
+
   "sources": [
-    { "id": "ffzy", "name": "非凡资源", "type": "vod",
-      "url": "https://cj.ffzyapi.com/api.php/provide/vod/from/ffm3u8", "adapter": "vod" }
+    { "id": "ffzy", "name": "非凡资源",
+      "url": "https://cj.ffzyapi.com/api.php/provide/vod/from/ffm3u8",
+      "adapter": "vod", "type": "vod" }
   ]
 }
 ```
 
-顶层四个字段是必填的:`schema`、`name`、`version`、`updated`。`version` 用 `1.0.0` 这种三段式,
-内容变了就把最后一段加一 —— 应用靠它判断有没有新版本。
+- `schema` / `name` / `version` / `updated` 必填。`version` 用 `1.0.0`,内容变了把最后一段加一
+- `adapters` 可以不写 —— 用内置的 `vod` / `iplayr` / `m3u` 时不用声明
 
 ### 源
 
-| 字段 | 说明 |
-| --- | --- |
-| `id` | 稳定标识,定了就别改,更新时靠它认人 |
-| `name` | 显示名 |
-| `type` | `vod`(JSON 接口)/ `xml` / `live`(频道表)/ `webox`(插件源) |
-| `url` | 接口地址,必须是 http(s) |
-| `adapter` | 用哪个适配器:`vod` / `iplayr` / `m3u` / `reelbox`(插件) |
-| `posterRatio` | 可选,封面比例,比如 `16:9`;不写就按 2:3 |
+| 字段 | 必填 | 说明 |
+| --- | --- | --- |
+| `id` | ✅ | 稳定标识,定了别改 |
+| `name` | ✅ | 显示名 |
+| `url` | ✅ | 站点地址,必须 http(s) |
+| `adapter` | ✅ | 内置名字,或 `adapters` 里的 id |
+| `type` | ✅ | `vod` / `xml` / `live` / `webox` |
+| `verify` | | `true` = 运行时要人工过校验(Cloudflare) |
+| `verifyUrl` | | 校验页地址;`url` 推不出站点域名时必填 |
+| `posterRatio` | | 封面比例,如 `16:9` |
+| `options` | | 交给插件的参数,比如 `{ "quality": "1080" }` |
 
-插件型的源不写 `url`,写 `plugin`,值是 `plugins` 里那条的 id。装的时候应用会把它换成本机
-插件文件的路径:
+`type` 为什么不省:直播插件的 url 是站点域名、又不是 `.m3u8`,靠猜会被当成点播,
+表现是"能播但进度条一直在"。
 
-```json
-{ "id": "4kvm", "name": "4K影视", "type": "webox", "adapter": "reelbox", "plugin": "4kvm" }
+### 适配器
+
+| 字段 | 必填 | 说明 |
+| --- | --- | --- |
+| `id` | ✅ | 源用它引用;不能和内置名重名 |
+| `name` | ✅ | 显示名 |
+| `url` | ✅ | 代码文件位置,相对或绝对 |
+
+**不写版本号、不写 sha256**:版本在代码自己的 `define({...})` 里,完整性靠 HTTPS。
+
+`url` 两种写法:
+
 ```
-
-### 插件 / 适配器
-
-```json
-{ "id": "4kvm", "name": "4K影视", "path": "4kvm.reelbox.js", "version": "1.0.0", "sha256": "…" }
+plugins/4kvm.reelbox.js                    → 仓库里的 plugins/ 下(推荐)
+https://cdn.x.com/4kvm.reelbox.js          → 别处(换了 CDN 要改索引)
 ```
-
-- `path` 一般只写文件名,文件放在 `plugins/` 下(应用只扫这一层,子目录不认);
-  也可以写完整的 `https://…` 地址,把文件放别的仓库或 CDN —— 代价是这份配置绑在那个域名上
-- `sha256` 用 `node scripts/stamp.mjs` 自动填,别手写
-- 适配器把文件名换成 `xxx.adapter.js` 即可,别用 `vod` / `iplayr` / `m3u` / `reelbox` 这几个内置名字
 
 ## 改完怎么发
 
 ```bash
-node scripts/validate.mjs        # 检查:字段、文件、语法、sha256
-node scripts/stamp.mjs --bump    # 重新算 sha256,版本号 +1
+node scripts/validate.mjs        # 检查:字段、文件、语法
+node scripts/stamp.mjs --bump    # 版本号 +1、更新时间
 git add -A && git commit -m "..." && git push
 ```
 
-推上去 GitHub 会自动跑一遍校验,通过后顺手把 jsDelivr 的缓存刷掉,几十秒后应用就能查到新版本。
-
-## 缓存
-
-jsDelivr 对分支地址缓存 12 小时。CI 已经自动刷新了,一般不用管;真遇到"改了没生效",手动刷一下:
-
-```
-https://purge.jsdelivr.net/gh/hujiejeff/reelbox-config@master
-```
+推上去 GitHub 会跑一遍校验,通过后顺手刷掉 jsDelivr 的缓存。
