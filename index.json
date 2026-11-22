@@ -1,0 +1,70 @@
+{
+  "schema": "reelbox-index/1",
+  "name": "reelbox 基础配置",
+  "version": 1,
+  "updated": "2026-11-22T06:30:00Z",
+  "homepage": "https://github.com/hujiejeff/reelbox-config",
+  "adapters": [],
+  "plugins": [],
+  "sources": [
+    {
+      "id": "ffzy",
+      "name": "非凡资源",
+      "type": "vod",
+      "url": "https://cj.ffzyapi.com/api.php/provide/vod/from/ffm3u8",
+      "adapter": "vod"
+    },
+    {
+      "id": "dytt",
+      "name": "电影天堂",
+      "type": "vod",
+      "url": "https://caiji.dyttzyapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "lziapi",
+      "name": "量子资源",
+      "type": "xml",
+      "url": "https://cj.lziapi.com/api.php/provide/vod/at/xml",
+      "adapter": "vod"
+    },
+    {
+      "id": "wsyzy",
+      "name": "无水印资源",
+      "type": "vod",
+      "url": "https://api.wsyzy.net/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "dbk",
+      "name": "独播库",
+      "type": "vod",
+      "url": "https://raw.githubusercontent.com/m3u8playlist/dp/master/iplayr/dbk.json",
+      "adapter": "iplayr",
+      "verify": false
+    },
+    {
+      "id": "libvio",
+      "name": "libvio",
+      "type": "vod",
+      "url": "https://raw.githubusercontent.com/m3u8playlist/dp/refs/heads/master/iplayr/libvio2.json",
+      "adapter": "iplayr"
+    },
+    {
+      "id": "cnlive",
+      "name": "IPTV 中国",
+      "type": "live",
+      "url": "https://iptv-org.github.io/iptv/countries/cn.m3u",
+      "adapter": "m3u",
+      "posterRatio": "16:9"
+    },
+    {
+      "id": "itvlist",
+      "name": "ITV 频道表",
+      "type": "live",
+      "url": "https://bit.ly/itvlist",
+      "adapter": "m3u",
+      "posterRatio": "16:9"
+    }
+  ]
+}
