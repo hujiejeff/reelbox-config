@@ -15,3 +15,13 @@ jobs:
           node-version: "20"
       - name: 检查 index.json
         run: node scripts/validate.mjs
+
+      # 校验过了就顺手把 jsDelivr 的缓存刷掉。
+      # 分支地址默认缓存 12 小时,不刷的话用户拿到的还是上一版 —— 表现为
+      # "明明改了却提示版本不对"。
+      - name: 刷新 jsDelivr 缓存
+        if: github.ref == 'refs/heads/master'
+        run: |
+          curl -fsS "https://purge.jsdelivr.net/gh/${{ github.repository }}@master" >/dev/null || true
+          sleep 2
+          curl -fsS "https://purge.jsdelivr.net/gh/${{ github.repository }}@master/index.json" || true

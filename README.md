@@ -32,6 +32,34 @@ scripts/stamp.mjs     提交前补 sha256
 
 其余字段没变。
 
+## 缓存:改了却不生效?
+
+jsDelivr 按版本缓存:**分支地址 12 小时**,tag 地址永久(因为 tag 的内容本来就不该变)。
+
+改了仓库之后,如果应用里还是旧内容:
+
+1. 等(最多 12 小时),或
+2. 手动刷一次:
+
+```
+https://purge.jsdelivr.net/gh/hujiejeff/reelbox-config@master
+```
+
+返回 `"status": "finished"` 就是刷完了,再请求拿到的就是新的。
+(取单个文件也行:`…@master/index.json`)
+
+本仓库的 CI 在校验通过后会**自动刷**一次,所以正常情况 push 完半分钟内就生效。
+
+应用自己不缓存,每次「检查」都重新拉 —— 拿到什么完全取决于 CDN 那一层。
+想彻底躲开缓存,把地址固定到 tag:
+
+```
+https://cdn.jsdelivr.net/gh/hujiejeff/reelbox-config@v1.0.0/index.json
+```
+
+tag 内容不会变,缓存不缓存都一样;发新版本时打新 tag。
+注意 `raw.githubusercontent.com` 没有这层缓存,但国内经常连不上。
+
 ## index.json 字段
 
 ### 顶层
