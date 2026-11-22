@@ -2,7 +2,7 @@
 
 reelbox 的**配置订阅**仓库:一个 `index.json` 里装着源、源插件、适配器。
 
-在应用里粘贴一次地址,就能一次装齐;以后改了仓库,应用比对版本号自动更新。
+在应用里粘贴一次地址,就能一次装齐。同一时刻只有一份配置生效,切换 = 整体换一套源;以后改了仓库,在应用里点「检查」看有没有新版本。
 
 ```
 index.json          ← 清单(源直接写在里面)
@@ -19,11 +19,18 @@ scripts/stamp.mjs     提交前补 sha256
 
 | 地址 | 适用 |
 | --- | --- |
-| `https://raw.githubusercontent.com/hujiejeff/reelbox-config/main/index.json` | 直连 GitHub 顺畅时 |
-| `https://cdn.jsdelivr.net/gh/hujiejeff/reelbox-config@main/index.json` | 国内通常更快 |
+| `https://raw.githubusercontent.com/hujiejeff/reelbox-config/master/index.json` | 直连 GitHub 顺畅时 |
+| `https://cdn.jsdelivr.net/gh/hujiejeff/reelbox-config@master/index.json` | 国内通常更快 |
 | `https://hujiejeff.github.io/reelbox-config/index.json` | 开了 Pages 才有 |
 
-想固定版本不被误改,把 `main` 换成 tag,例如 `@v1`。
+分支叫 **master**(不是 main)—— 写错就是 404。想固定版本不被误改,把 `master` 换成 tag,例如 `@v1.0.0`。
+
+## 和上一版的区别
+
+**`version` 必须是字符串**:`"1.0.0"`,不能再写 `1`。
+老写法现在装不上,应用会直接提示「version 要写成字符串 \"1.0.0\"」。
+
+其余字段没变。
 
 ## index.json 字段
 
