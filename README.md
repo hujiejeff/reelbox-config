@@ -33,7 +33,7 @@ scripts/stamp.mjs     提交前补 sha256
 | --- | --- | --- |
 | `schema` | ✅ | 固定 `"reelbox-index/1"` |
 | `name` | ✅ | 订阅列表里显示的名字 |
-| `version` | ✅ | 整数,只增不减。应用靠它判断「要不要拉」 |
+| `version` | ✅ | **semver**(`1.0.0`),只增不减。应用靠它判断「有没有更新」 |
 | `updated` | ✅ | ISO8601,不能是未来时间 |
 | `homepage` | | 仓库地址 |
 | `adapters` / `plugins` / `sources` | | 三个数组,缺省当空 |
@@ -45,7 +45,7 @@ scripts/stamp.mjs     提交前补 sha256
 | `id` | ✅ | 全索引唯一 |
 | `name` | ✅ | 展示名 |
 | `path` | ✅ | `plugins/` 下的文件名,不带目录 |
-| `version` | | 这个文件自己的版本,便于看变更 |
+| `version` | | 这个文件自己的版本(semver),便于看变更 |
 | `sha256` | ✅ | 由 `scripts/stamp.mjs` 生成 |
 | `minApp` | | 需要的最低应用版本 `x.y.z` |
 
@@ -67,7 +67,7 @@ scripts/stamp.mjs     提交前补 sha256
 
 1. 往 `sources` 里加一项,`id` 想个短而稳的(后面不要改)
 2. `node scripts/validate.mjs` 检查
-3. `node scripts/stamp.mjs --bump` 提版本
+3. `node scripts/stamp.mjs --bump` 把最后一段 +1(`1.0.0` → `1.0.1`)
 4. 提交
 
 ## 加一个插件

@@ -126,7 +126,9 @@ if (!idx) {
 
 if (idx.schema !== SCHEMA) fail(`schema 必须是 "${SCHEMA}",现在是 ${JSON.stringify(idx.schema)}`);
 if (!idx.name || typeof idx.name !== "string") fail("缺 name(订阅列表里显示的就是它)");
-if (!Number.isInteger(idx.version) || idx.version < 1) fail("version 必须是 ≥1 的整数");
+if (!/^\d+\.\d+\.\d+$/.test(String(idx.version))) {
+  fail(`version 要写成 1.0.0 这种三段式,现在是 ${JSON.stringify(idx.version)}`);
+}
 if (!idx.updated || Number.isNaN(Date.parse(idx.updated))) {
   fail("updated 必须是 ISO8601 时间");
 } else if (Date.parse(idx.updated) > Date.now() + 60_000) {

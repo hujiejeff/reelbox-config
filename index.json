@@ -1,8 +1,8 @@
 {
   "schema": "reelbox-index/1",
   "name": "reelbox 基础配置",
-  "version": 1,
-  "updated": "2026-11-22T06:30:00Z",
+  "version": "1.0.0",
+  "updated": "2026-11-22T07:20:00Z",
   "homepage": "https://github.com/hujiejeff/reelbox-config",
   "adapters": [],
   "plugins": [],

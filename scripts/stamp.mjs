@@ -45,7 +45,11 @@ for (const a of idx.adapters || []) stamp(a, "adapter");
 for (const p of idx.plugins || []) stamp(p, "plugin");
 
 if (bump) {
-  idx.version = (Number(idx.version) || 0) + 1;
+  // 三段式:x.y.z,只加最后一段。改结构才动中间/前面那段
+  const m = /^(\d+)\.(\d+)\.(\d+)$/.exec(String(idx.version));
+  idx.version = m
+    ? `${m[1]}.${m[2]}.${Number(m[3]) + 1}`
+    : "1.0.0";
   console.log(`  version → ${idx.version}`);
 }
 idx.updated = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
