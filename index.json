@@ -1,11 +1,19 @@
 {
   "schema": "reelbox-index/1",
   "name": "reelbox 基础配置",
-  "version": "1.0.0",
-  "updated": "2026-11-22T07:20:00Z",
+  "version": "1.1.0",
+  "updated": "2026-11-22T12:18:28Z",
   "homepage": "https://github.com/hujiejeff/reelbox-config",
   "adapters": [],
-  "plugins": [],
+  "plugins": [
+    {
+      "id": "4kvm",
+      "name": "4K影视",
+      "path": "4kvm.reelbox.js",
+      "version": "1.0.0",
+      "sha256": "c562ea5543fb06003d82f40c2fe0f215e6cb5b34c73d3d760e7f744d9fbc80db"
+    }
+  ],
   "sources": [
     {
       "id": "ffzy",
@@ -64,6 +72,161 @@
       "url": "https://bit.ly/itvlist",
       "adapter": "m3u",
       "posterRatio": "16:9"
+    },
+    {
+      "id": "hhzy",
+      "name": "豪华资源",
+      "type": "vod",
+      "url": "https://hhzyapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "subo",
+      "name": "速播资源",
+      "type": "vod",
+      "url": "https://subocaiji.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "uku",
+      "name": "U酷资源",
+      "type": "vod",
+      "url": "https://api.ukuapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "yhzy",
+      "name": "樱花资源",
+      "type": "vod",
+      "url": "http://m3u8.apiyhzy.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "jszy",
+      "name": "极速资源",
+      "type": "vod",
+      "url": "https://jszyapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "jinying",
+      "name": "金鹰资源",
+      "type": "vod",
+      "url": "http://jyzyapi.com/provide/vod/from/jinyingm3u8",
+      "adapter": "vod"
+    },
+    {
+      "id": "bfzy",
+      "name": "暴风资源",
+      "type": "vod",
+      "url": "https://bfzyapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "sdzy",
+      "name": "闪电资源",
+      "type": "vod",
+      "url": "http://sdzyapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "zy360",
+      "name": "360 资源",
+      "type": "vod",
+      "url": "https://360zy.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "zuida",
+      "name": "最大资源",
+      "type": "vod",
+      "url": "http://zuidazy.me/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "xinlang",
+      "name": "新浪资源",
+      "type": "vod",
+      "url": "https://api.xinlangapi.com/xinlangapi.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "wujin",
+      "name": "无尽资源",
+      "type": "vod",
+      "url": "https://api.wujinapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "niuniu",
+      "name": "牛牛资源",
+      "type": "vod",
+      "url": "https://api.niuniuzy.me/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "hongniu",
+      "name": "红牛资源",
+      "type": "vod",
+      "url": "https://www.hongniuzy2.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "yaya",
+      "name": "丫丫资源",
+      "type": "vod",
+      "url": "https://cj.yayazy.net/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "suoni",
+      "name": "索尼资源",
+      "type": "vod",
+      "url": "https://suoniapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "modu",
+      "name": "魔都资源",
+      "type": "vod",
+      "url": "https://caiji.moduapi.cc/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "baidu",
+      "name": "百度资源",
+      "type": "vod",
+      "url": "https://api.apibdzy.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "aidan",
+      "name": "艾旦影视",
+      "type": "vod",
+      "url": "http://lovedan.net/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "huya",
+      "name": "虎牙资源",
+      "type": "vod",
+      "url": "https://www.huyaapi.com/api.php/provide/vod",
+      "adapter": "vod"
+    },
+    {
+      "id": "guangsu",
+      "name": "光速资源",
+      "type": "vod",
+      "url": "http://api.guangsuapi.com/api.php/provide/vod/from/gsm3u8",
+      "adapter": "vod"
+    },
+    {
+      "id": "4kvm",
+      "name": "4K影视",
+      "type": "webox",
+      "adapter": "reelbox",
+      "plugin": "4kvm",
+      "posterRatio": "2:3"
     }
   ]
 }

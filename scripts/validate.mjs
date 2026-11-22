@@ -141,11 +141,15 @@ for (const key of ["adapters", "plugins", "sources"]) {
   if (!Array.isArray(idx[key])) fail(`${key} 必须是数组`);
 }
 
+// 两个命名空间:插件 / 适配器共用一套(都是装在 plugins/ 下的文件),源自己一套。
+// 所以"插件 4kvm + 源 4kvm"是合法的 —— 那是两件事。
 const ids = new Map();
+const srcIds = new Map();
 const claim = (id, kind) => {
   if (!id) return;
-  if (ids.has(id)) fail(`id "${id}" 重复(${ids.get(id)} 和 ${kind})`);
-  else ids.set(id, kind);
+  const box = kind === "source" ? srcIds : ids;
+  if (box.has(id)) fail(`id "${id}" 重复(${box.get(id)} 和 ${kind})`);
+  else box.set(id, kind);
 };
 
 // ---- 适配器 / 插件 ----
@@ -162,7 +166,9 @@ for (const a of idx.adapters || []) {
   checkCodeEntry(a, "adapter");
 }
 
+const pluginIds = new Set();
 for (const p of idx.plugins || []) {
+  if (p && p.id) pluginIds.add(p.id);
   claim(p && p.id, "plugin");
   checkCodeEntry(p, "plugin");
 }
@@ -181,11 +187,20 @@ for (const s of idx.sources || []) {
   if (!SOURCE_TYPES.has(s.type)) {
     fail(`${where}:type 只能是 ${[...SOURCE_TYPES].join(" / ")},现在是 ${JSON.stringify(s.type)}`);
   }
-  if (!s.url || typeof s.url !== "string") {
-    fail(`${where}:缺 url`);
+  const hasPlugin = typeof s.plugin === "string" && s.plugin !== "";
+  if (hasPlugin) {
+    // 插件型的源:装的时候 url 会被换成插件在本机的路径,索引里不用写
+    if (!pluginIds.has(s.plugin)) {
+      fail(`${where}:引用了不在 plugins 里的插件 ${JSON.stringify(s.plugin)}`);
+    }
+    if (s.url !== undefined && s.url !== "" && !isHttpUrl(s.url)) {
+      fail(`${where}:url 要么不写,要么是 http(s)`);
+    }
+  } else if (!s.url || typeof s.url !== "string") {
+    fail(`${where}:缺 url(或者用 plugin 指明由哪个插件解析)`);
   } else if (!isHttpUrl(s.url)) {
     // 本地路径的源(指向用户自己 plugins 里的文件)不能进订阅:别人装了没有那个文件
-    fail(`${where}:url 必须是 http(s),不能是本地路径 —— 本地插件的源请改成 adapter+plugin`);
+    fail(`${where}:url 必须是 http(s),不能是本地路径 —— 本地插件的源请写成 plugin`);
   }
   if (!s.adapter || typeof s.adapter !== "string") {
     fail(`${where}:缺 adapter`);
@@ -193,7 +208,7 @@ for (const s of idx.sources || []) {
     fail(`${where}:adapter "${s.adapter}" 既不是内置的,也不在本索引的 adapters 里`);
   }
   if (s.verify !== undefined && typeof s.verify !== "boolean") fail(`${where}:verify 必须是 true/false`);
-  if (s.verify === true && !s.verifyUrl && !isHttpUrl(s.url)) {
+  if (s.verify === true && !s.verifyUrl && !hasPlugin && !isHttpUrl(s.url)) {
     fail(`${where}:开了 verify 但推不出站点地址,要显式写 verifyUrl`);
   }
   if (s.posterRatio !== undefined && !/^\d+:\d+$/.test(String(s.posterRatio))) {
