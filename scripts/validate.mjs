@@ -72,12 +72,23 @@ function checkCodeEntry(entry, kind) {
   if (!entry.path || typeof entry.path !== "string") return fail(`${where}:缺 path`);
 
   const suffix = kind === "adapter" ? ".adapter.js" : ".reelbox.js";
-  if (!entry.path.endsWith(suffix)) {
-    fail(`${where}:path 必须以 ${suffix} 结尾(应用只认这个后缀)`);
+  // path 两种写法:
+  //   1) 文件名 —— 装在仓库的 plugins/ 下(应用只扫一层,不能带子目录)
+  //   2) 完整的 http(s) 地址 —— 文件放在别处(别的仓库 / CDN),这一份校验不了内容
+  const remote = isHttpUrl(entry.path);
+  const fileName = entry.path.split(/[?#]/)[0].split("/").pop() || "";
+  if (!fileName.endsWith(suffix)) {
+    fail(`${where}:文件名必须以 ${suffix} 结尾(应用只认这个后缀)`);
   }
-  // 适配器和插件都必须躺在 plugins/ 第一层:应用扫描不看子目录
-  if (entry.path.includes("/")) {
-    fail(`${where}:path 不能带子目录(应用只扫 plugins/ 一层)`);
+  if (!remote && entry.path.includes("/")) {
+    fail(`${where}:path 要么是文件名(装在 plugins/ 下),要么是完整的 http(s) 地址`);
+  }
+  if (remote) {
+    if (!entry.sha256 || !/^[0-9a-f]{64}$/i.test(String(entry.sha256))) {
+      fail(`${where}:远程文件也要填 sha256(应用会拿它校验下载内容)`);
+    }
+    note(`${where}:path 是远程地址,内容不在这份仓库里,本地校验跳过`);
+    return checkMinApp(entry, where);
   }
 
   const abs = resolvePath(`plugins/${entry.path}`) ?? resolvePath(entry.path);
@@ -104,6 +115,10 @@ function checkCodeEntry(entry, kind) {
     fail(`${where}:缺 sha256(订阅要靠它判断文件是否被改)`);
   }
 
+  checkMinApp(entry, where);
+}
+
+function checkMinApp(entry, where) {
   if (entry.minApp !== undefined && !/^\d+\.\d+\.\d+$/.test(String(entry.minApp))) {
     fail(`${where}:minApp 要写成 x.y.z`);
   }

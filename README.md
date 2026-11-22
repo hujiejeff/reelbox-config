@@ -66,7 +66,8 @@ https://raw.githubusercontent.com/hujiejeff/reelbox-config/master/index.json
 { "id": "4kvm", "name": "4K影视", "path": "4kvm.reelbox.js", "version": "1.0.0", "sha256": "…" }
 ```
 
-- `path` 只写文件名,文件放在 `plugins/` 下(应用只扫这一层,子目录不认)
+- `path` 一般只写文件名,文件放在 `plugins/` 下(应用只扫这一层,子目录不认);
+  也可以写完整的 `https://…` 地址,把文件放别的仓库或 CDN —— 代价是这份配置绑在那个域名上
 - `sha256` 用 `node scripts/stamp.mjs` 自动填,别手写
 - 适配器把文件名换成 `xxx.adapter.js` 即可,别用 `vod` / `iplayr` / `m3u` / `reelbox` 这几个内置名字
 
