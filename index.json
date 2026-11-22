@@ -40,8 +40,7 @@
       "name": "独播库",
       "type": "vod",
       "url": "https://raw.githubusercontent.com/m3u8playlist/dp/master/iplayr/dbk.json",
-      "adapter": "iplayr",
-      "verify": false
+      "adapter": "iplayr"
     },
     {
       "id": "libvio",
