@@ -1,8 +1,8 @@
 {
   "schema": "reelbox-index/1",
   "name": "reelbox 基础配置",
-  "version": "1.1.0",
-  "updated": "2026-11-22T12:18:28Z",
+  "version": "1.1.1",
+  "updated": "2026-11-22T12:23:26Z",
   "homepage": "https://github.com/hujiejeff/reelbox-config",
   "adapters": [],
   "plugins": [
@@ -11,7 +11,7 @@
       "name": "4K影视",
       "path": "4kvm.reelbox.js",
       "version": "1.0.0",
-      "sha256": "c562ea5543fb06003d82f40c2fe0f215e6cb5b34c73d3d760e7f744d9fbc80db"
+      "sha256": "bdfdc2129a72c6732346f5e3aad7bd10257cfdc4500b466186582e33e6ccc795"
     }
   ],
   "sources": [
